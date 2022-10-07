@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --verbose --coverage",
+    "start": "node ndex.js"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,11 @@
   "bugs": {
     "url": "https://github.com/team-music-queue/jukebox/issues"
   },
-  "homepage": "https://github.com/team-music-queue/jukebox#readme"
+  "homepage": "https://github.com/team-music-queue/jukebox#readme",
+  "dependencies": {
+    "jest": "^29.1.2",
+    "chance": "^1.1.8",
+    "socket.io": "^4.5.2",
+    "socket.io-client": "^4.5.2"
+  }
 }
