@@ -25,10 +25,8 @@ io.on('connection', async (socket) => {
   let isRunning = false;
 
   // send the queue when a client connects
-  socket.on('connect', () => {
-    console.log(`Client joined: ${socket.id}`);
-    socket.emit('send-queue', queue);
-  });
+  console.log(`Client joined: ${socket.id}`);
+  socket.emit('send-queue', queue);
 
   // when client adds a song, add it to queue
   // if a song is not playing, call playSong() to start it
@@ -36,7 +34,8 @@ io.on('connection', async (socket) => {
     payload.songId = chance.guid();
     console.log(`${payload.songId} added to queue`);
     queue.addSong(payload);
-    socket.broadcast.emit('add', queue);
+    console.log(queue);
+    io.sockets.emit('update-queue', queue);
     if(!isRunning) {
       playSong();
     }
@@ -46,7 +45,7 @@ io.on('connection', async (socket) => {
   socket.on('bid', payload => {
     console.log(payload);
     queue.bid(payload);
-    socket.broadcast.emit('bid', queue);
+    socket.broadcast.emit('update-queue', queue);
   });
 
   // play song sets is Running is true, so that playSong is not called again when a song is added
@@ -72,7 +71,7 @@ io.on('connection', async (socket) => {
     try {
       console.log(`${removedSong.songId} removed from queue`);
     } catch(e) {console.log('No more songs to remove');}
-    socket.emit('remove', queue);
+    socket.emit('update-queue', queue);
   }
 });
 
