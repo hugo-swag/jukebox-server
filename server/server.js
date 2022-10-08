@@ -43,7 +43,6 @@ io.on('connection', async (socket) => {
 
   // when client bids, the bid method in MusicQueue updates the bid and sorts the queue
   socket.on('bid', payload => {
-    console.log(payload);
     queue.bid(payload);
     io.sockets.emit('update-queue', queue);
   });

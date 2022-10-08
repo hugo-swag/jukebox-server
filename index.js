@@ -1,3 +1,3 @@
 'use strict';
 
-const server = require('./src/server/server.js');
+const server = require('./src/server');
