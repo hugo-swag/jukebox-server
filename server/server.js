@@ -6,7 +6,6 @@ const express = require('express');
 const socketIO = require('socket.io');
 
 const publicPath = path.join(__dirname, './../public');
-const PORT = process.env.PORT || 3000;
 let app = express();
 let server = http.createServer(app);
 let io = socketIO(server);
@@ -26,7 +25,7 @@ io.on('connection', async (socket) => {
 
   // send the queue when a client connects
   console.log(`Client joined: ${socket.id}`);
-  socket.emit('send-queue', queue);
+  io.to(socket.id).emit('send-queue', queue);
 
   // when client adds a song, add it to queue
   // if a song is not playing, call playSong() to start it
@@ -34,7 +33,6 @@ io.on('connection', async (socket) => {
     payload.songId = chance.guid();
     console.log(`${payload.songId} added to queue`);
     queue.addSong(payload);
-    console.log(queue);
     io.sockets.emit('update-queue', queue);
     if(!isRunning) {
       playSong();
@@ -74,4 +72,9 @@ io.on('connection', async (socket) => {
   }
 });
 
-server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+module.exports = {
+  server:server,
+  start: PORT => {
+    server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+  },
+};

@@ -10,8 +10,6 @@ let localQueue = [];
 // server sends queue as soon as a client joins
 socket.on('send-queue', (payload) => {
   localQueue = payload;
-  console.log(localQueue.songList);
-  console.log('queue received on init');
 });
 
 socket.on('update-queue', (payload) => {
@@ -30,12 +28,16 @@ songForm.addEventListener('submit', (e) => {
 
 function updateQueueList() {
   queueDiv.innerHTML = '';
-  for(let song of localQueue.songList) {
+  const songList = localQueue.songList;
+  for(let index in songList) {
     const li = document.createElement('li');
-    li.innerHTML = `${song.name} by ${song.artist}: current bid at ${song.bid}`;
+    li.innerHTML = `${songList[index].name} by ${songList[index].artist}: current bid at ${songList[index].bid}`;
     
-    const form = getBidForm(song);
-    li.appendChild(form);
+    console.log(index);
+    if(index !== 0) {
+      const form = getBidForm(songList[index]);
+      li.appendChild(form);
+    }
 
     queueDiv.appendChild(li);
   }
@@ -57,7 +59,6 @@ function handleBid(song, bid) {
   if(!isNaN(parseInt(bid))) {
     song.bid += parseInt(bid);
     socket.emit('bid', song);
-    console.log(song.bid);
   }
 }
 
