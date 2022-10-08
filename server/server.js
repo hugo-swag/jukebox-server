@@ -45,7 +45,7 @@ io.on('connection', async (socket) => {
   socket.on('bid', payload => {
     console.log(payload);
     queue.bid(payload);
-    socket.broadcast.emit('update-queue', queue);
+    io.sockets.emit('update-queue', queue);
   });
 
   // play song sets is Running is true, so that playSong is not called again when a song is added
@@ -71,7 +71,7 @@ io.on('connection', async (socket) => {
     try {
       console.log(`${removedSong.songId} removed from queue`);
     } catch(e) {console.log('No more songs to remove');}
-    socket.emit('update-queue', queue);
+    io.sockets.emit('update-queue', queue);
   }
 });
 
