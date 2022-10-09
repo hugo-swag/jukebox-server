@@ -43,11 +43,12 @@ io.on('connection', async (socket) => {
   io.to(socket.id).emit('room-list', getRoomList());
 
   // create a new queue for that room, give the queueName property the same as the room name
-  socket.on('create-room', roomName => {
-    socket.join(roomName);
-    console.log(`${socket.id} joined room ${roomName}`);
+  socket.on('create-room', rooms => {
+    socket.leave(rooms.currentRoom);
+    socket.join(rooms.newRoom);
+    console.log(`${socket.id} joined room ${rooms.newRoom}`);
 
-    const newQueue = new MusicQueue(roomName);
+    const newQueue = new MusicQueue(rooms.newRoom);
     queueList.push(newQueue);
 
     io.sockets.emit('room-list', getRoomList());
@@ -56,11 +57,12 @@ io.on('connection', async (socket) => {
   });
 
   // when a user joins, send them that rooms queue and current song
-  socket.on('join-room', (roomName) => {
-    socket.join(roomName);
-    console.log(`${socket.id} joined room ${roomName}`);
+  socket.on('join-room', rooms => {
+    socket.leave(rooms.currentRoom);
+    socket.join(rooms.newRoom);
+    console.log(`${socket.id} joined room ${rooms.newRoom}`);
 
-    const queue = findQueue(roomName);
+    const queue = findQueue(rooms.newRoom);
     io.to(socket.id).emit('update-playing-and-queue', queue);
   });
 
@@ -71,7 +73,7 @@ io.on('connection', async (socket) => {
 
     const queue = findQueue(songToAdd.room);
     queue.addSong(songToAdd);
-    io.sockets.emit('update-queue', queue);
+    io.to(queue.queueName).emit('update-queue', queue);
     console.log(`${songToAdd.songId} added to queue`);
 
     if(!isRunning) {
@@ -90,7 +92,6 @@ io.on('connection', async (socket) => {
   // play song sets is Running is true, so that playSong is not called again when a song is added
   // it sets a timeout according to the duration of the song, after timeout, calls play next song
   function playSong(queue) {
-    console.log(queue);
     isRunning = true;
     setTimeout(() => {
       playNextSong(queue);

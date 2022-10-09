@@ -125,15 +125,16 @@ function addCreateRoomListener() {
   const createRoomForm = document.querySelector('#createRoomForm');
   createRoomForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    currentRoom = e.target.roomName.value;
-    socket.emit('create-room', currentRoom);
+    const newRoom = e.target.roomName.value;
+    socket.emit('create-room', {currentRoom: currentRoom, newRoom: newRoom});
+    currentRoom = newRoom;
     currentRoomDisplay.innerHTML = `Current Room ${currentRoom}`;
   });
 }
 addCreateRoomListener();
 
 function joinRoom(room) {
-  socket.emit('join-room', room);
+  socket.emit('join-room', {currentRoom: currentRoom, newRoom: room});
   currentRoom = room;
   currentRoomDisplay.innerHTML = `Current Room ${room}`;
 }
