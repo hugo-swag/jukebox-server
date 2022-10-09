@@ -16,7 +16,7 @@ class MusicQueue {
     const foundIndex = this.songList.findIndex(currSong => currSong.songId === song.songId);
     if(foundIndex > -1) {
       this.songList[foundIndex].bid = song.bid;
-      this.songList.sort((prevSong, currSong) => prevSong.bid - currSong.bid);
+      this.songList.sort((prevSong, currSong) => currSong.bid - prevSong.bid);
 
     }  
   }
