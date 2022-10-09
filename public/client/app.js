@@ -9,10 +9,23 @@ const nowPlayingHeader = document.querySelector('#nowPlaying');
 let localQueue = [];
 
 // server sends queue as soon as a client joins
-socket.on('send-queue', (payload) => {
+// socket.on('send-queue', (payload) => {
+//   localQueue = payload;
+//   try {
+//     if(localQueue.songList) {
+//       showPlaying(localQueue.songList[0]);
+//       updateQueueList();
+//     } 
+//   } catch(e) {
+//     console.log('empty song list, cannot update queue');
+//   }
+// });
+
+// only update the song playing when you enter and when the song changes
+socket.on('update-playing-and-queue', (payload) => {
   localQueue = payload;
   try {
-    if(localQueue.songList) {
+    if(localQueue.songList !== 0) {
       showPlaying(localQueue.songList[0]);
       updateQueueList();
     } 
@@ -21,23 +34,11 @@ socket.on('send-queue', (payload) => {
   }
 });
 
+// update the queue whenever songs are added and bided on
 socket.on('update-queue', (payload) => {
   localQueue = payload;
   try {
     if(localQueue.songList) {
-      showPlaying(localQueue.songList[0]);
-      updateQueueList();
-    } 
-  } catch(e) {
-    console.log('empty song list, cannot update queue');
-  }
-});
-
-socket.on('next', (payload) => {
-  localQueue = payload;
-  try {
-    if(localQueue.songList) {
-      showPlaying(localQueue.songList[0]);
       updateQueueList();
     } 
   } catch(e) {

@@ -25,7 +25,7 @@ io.on('connection', async (socket) => {
 
   // send the queue when a client connects
   console.log(`Client joined: ${socket.id}`);
-  io.to(socket.id).emit('send-queue', queue);
+  io.to(socket.id).emit('update-playing-and-queue', queue);
 
   // when client adds a song, add it to queue
   // if a song is not playing, call playSong() to start it
@@ -36,7 +36,8 @@ io.on('connection', async (socket) => {
     io.sockets.emit('update-queue', queue);
     if(!isRunning) {
       playSong();
-    }
+      io.sockets.emit('update-playing-and-queue', queue);
+    } else io.sockets.emit('update-queue', queue);
   });
 
   // when client bids, the bid method in MusicQueue updates the bid and sorts the queue
@@ -68,7 +69,7 @@ io.on('connection', async (socket) => {
     try {
       console.log(`${removedSong.songId} removed from queue`);
     } catch(e) {console.log('No more songs to remove');}
-    io.sockets.emit('next', queue);
+    io.sockets.emit('update-playing-and-queue', queue);
   }
 });
 
