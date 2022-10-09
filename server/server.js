@@ -68,7 +68,7 @@ io.on('connection', async (socket) => {
     try {
       console.log(`${removedSong.songId} removed from queue`);
     } catch(e) {console.log('No more songs to remove');}
-    io.sockets.emit('update-queue', queue);
+    io.sockets.emit('next', queue);
   }
 });
 

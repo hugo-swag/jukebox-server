@@ -4,16 +4,25 @@
 const socket = io();
 const songForm = document.querySelector('form');
 const queueDiv = document.querySelector('ul');
+const nowPlayingHeader = document.querySelector('#nowPlaying');
 
 let localQueue = [];
 
 // server sends queue as soon as a client joins
 socket.on('send-queue', (payload) => {
   localQueue = payload;
+  showPlaying(localQueue.songList[0]);
+  updateQueueList();
 });
 
 socket.on('update-queue', (payload) => {
   localQueue = payload;
+  updateQueueList();
+});
+
+socket.on('next', (payload) => {
+  localQueue = payload;
+  showPlaying(localQueue.songList[0]);
   updateQueueList();
 });
 
@@ -23,24 +32,26 @@ songForm.addEventListener('submit', (e) => {
   const name = e.target.songName.value;
   const artist = e.target.artist.value;
   const bid = parseInt(e.target.bid.value);
-  handleAddSong(name, artist, bid, 5000);
+  handleAddSong(name, artist, bid, 60000);
 });
 
 function updateQueueList() {
   queueDiv.innerHTML = '';
   const songList = localQueue.songList;
-  for(let index in songList) {
+
+  for(let index = 1; index < songList.length; index++) {
     const li = document.createElement('li');
     li.innerHTML = `${songList[index].name} by ${songList[index].artist}: current bid at ${songList[index].bid}`;
-    
-    console.log(index);
-    if(index !== 0) {
-      const form = getBidForm(songList[index]);
-      li.appendChild(form);
-    }
-
+    const form = getBidForm(songList[index]);
+    li.appendChild(form);
     queueDiv.appendChild(li);
   }
+}
+
+function showPlaying(song) {
+  nowPlayingHeader.innerHTML = `Now Playing: ${song.name} by ${song.artist}`;
+
+  // add an audio tag and src from the data we get from spotify api
 }
 
 function handleAddSong (name, artist, bid, songLength) {
