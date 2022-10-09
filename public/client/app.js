@@ -11,19 +11,38 @@ let localQueue = [];
 // server sends queue as soon as a client joins
 socket.on('send-queue', (payload) => {
   localQueue = payload;
-  showPlaying(localQueue.songList[0]);
-  updateQueueList();
+  try {
+    if(localQueue.songList) {
+      showPlaying(localQueue.songList[0]);
+      updateQueueList();
+    } 
+  } catch(e) {
+    console.log('empty song list, cannot update queue');
+  }
 });
 
 socket.on('update-queue', (payload) => {
   localQueue = payload;
-  updateQueueList();
+  try {
+    if(localQueue.songList) {
+      showPlaying(localQueue.songList[0]);
+      updateQueueList();
+    } 
+  } catch(e) {
+    console.log('empty song list, cannot update queue');
+  }
 });
 
 socket.on('next', (payload) => {
   localQueue = payload;
-  showPlaying(localQueue.songList[0]);
-  updateQueueList();
+  try {
+    if(localQueue.songList) {
+      showPlaying(localQueue.songList[0]);
+      updateQueueList();
+    } 
+  } catch(e) {
+    console.log('empty song list, cannot update queue');
+  }
 });
 
 
