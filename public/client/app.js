@@ -100,6 +100,7 @@ function getBidForm(song) {
 
     const input = document.createElement('input');
     input.type = 'number';
+    input.min = '0';
     input.id = 'existingSongBid';
 
     const submit = document.createElement('input');
