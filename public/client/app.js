@@ -79,7 +79,11 @@ function updateQueueList() {
 }
 
 function showPlaying(song) {
-  nowPlayingHeader.innerHTML = `Now Playing: ${song.name} by ${song.artist}`;
+  if(song) {
+    nowPlayingHeader.innerHTML = `Now Playing: ${song.name} by ${song.artist}`;
+  } else {
+    nowPlayingHeader.innerHTML = 'Add Songs to Queue to Play Song';
+  }
 
   // add an audio tag and src from the data we get from spotify api
 }
@@ -129,6 +133,7 @@ function addCreateRoomListener() {
     socket.emit('create-room', {currentRoom: currentRoom, newRoom: newRoom});
     currentRoom = newRoom;
     currentRoomDisplay.innerHTML = `Current Room ${currentRoom}`;
+    showPlaying();
   });
 }
 addCreateRoomListener();
