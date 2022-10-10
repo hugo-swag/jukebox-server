@@ -1,7 +1,7 @@
 # jukebox
 
 ## Live Deploy
-[Online Jukebox]](https://online-jukebox.herokuapp.com/)
+[Online Jukebox](https://online-jukebox.herokuapp.com/)
 
 ## Deployment
 
