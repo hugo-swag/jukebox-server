@@ -49,7 +49,7 @@ songForm.addEventListener('submit', (e) => {
   const name = e.target.songName.value;
   const artist = e.target.artist.value;
   const bid = parseInt(e.target.bid.value);
-  handleAddSong(name, artist, bid, 10000);
+  handleAddSong(name, artist, bid, 30000);
 });
 
 function handleAddSong (name, artist, bid, songLength) {
@@ -88,8 +88,6 @@ function showPlaying(song) {
   // add an audio tag and src from the data we get from spotify api
 }
 
-
-
 function handleBid(song, bid) {
   if(!isNaN(parseInt(bid))) {
     song.bid += parseInt(bid);
@@ -98,11 +96,11 @@ function handleBid(song, bid) {
 }
 
 function getBidForm(song) {
-
   try {
 
     const input = document.createElement('input');
     input.type = 'number';
+    input.min = '0';
     input.id = 'existingSongBid';
 
     const submit = document.createElement('input');
@@ -117,7 +115,6 @@ function getBidForm(song) {
       e.preventDefault();
       handleBid(song, e.target.existingSongBid.value);
     });
-
     
     return form;
   } catch(e) {
