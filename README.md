@@ -30,7 +30,7 @@ Enter the following commands in separate terminals to start:
 
 ## Documentation
 
-![Lab14 UML](./images/Lab14-UML.jpg)
+![Lab14 UML](/images/Lab-14-UML.jpg)
 
 ## Contributions
 
