@@ -1,22 +1,27 @@
 'use strict';
 
-const handleAddSong = require('../../src/Client/addSong.js');
+const handleAddSong = require('../../public/client/app.js');
+
+let socket = {
+  emit: jest.fn(),
+  on: jest.fn(),
+};
 
 describe('testing add song', () => {
   test('should emit a song object', () => {
-    let socket = {
-      emit: jest.fn(),
-      on: jest.fn(),
-    };
     let clientId = 'testid';
-    let name = 'testname';
-    let bid = 10;
-    handleAddSong(socket, clientId, name, bid);
+    let name = 'testName';
+    let bid = 1;
+    let artist = 'testArtist';
+    let songLength = 100;
+    handleAddSong(socket, name, artist, bid, songLength);
     expect(socket.emit).toHaveBeenCalledWith('add', {
       clientId,
-      songId: 'needs work',
       name,
+      artist,
       bid,
+      songLength,
+      room: 'needs work',
     });
   }); 
 });
