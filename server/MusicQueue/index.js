@@ -2,8 +2,9 @@
 
 class MusicQueue {
 
-  constructor() {
-    this.songList = [];    
+  constructor(queueName) {
+    this.songList = [];   
+    this.queueName = queueName; 
   }
 
   addSong(song) {

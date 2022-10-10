@@ -10,7 +10,18 @@
 <body>
     <h1>Welcome to Online Jukebox</h1>
 
-    <form>
+    <div>
+      <h2>Rooms</h2>
+      <form id="createRoomForm">
+        <label for="roomName">Room Name: </label>
+        <input type="text" id="roomName">
+        <input type="submit" id="createRoomSubmit" value="Create Room"/>
+      </form>
+      <h3 id="currentRoom">Current Room Main</h3>
+      <ul id="rooms"></ul>
+    </div>
+
+    <form id="addSongForm">
       <fieldset>
         <legend>Enter Song Info</legend>
           <p>
@@ -35,7 +46,7 @@
 
     <h2 id="nowPlaying"></h2>
     
-    <ul></ul>
+    <ol></ol>
 
   
     <script src="/socket.io/socket.io.js"></script>

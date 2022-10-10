@@ -1,3 +1,27 @@
 form {
   width:fit-content;
 }
+
+#rooms {
+  border: solid black 1px;
+}
+
+#createRoomSubmit {
+  color: white;
+  background-color: black;
+  padding: 6px;
+  width: fit-content;
+  border-radius: 5px;
+}
+
+#createRoomSubmit:hover {
+  cursor: pointer;
+}
+
+ul {
+  width: fit-content;
+}
+
+li {
+  padding: 10px;
+}
