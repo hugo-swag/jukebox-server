@@ -8,7 +8,7 @@ Every person on your team is an asset. This is your chance to discover the hidde
 
 - Carlos: My strength is team collaboration, big picture planning, and adaptability.
 
-- Jackson: My strength is algorithm solving as well as using socket.io in junction with helper functions to create 'paths' for a client to connect and use. I could use my abilities to ensure
+- Jackson: My strength is algorithm solving as well as using socket.io in junction with helper functions to create 'paths' for a client to connect and use. I could use my abilities to ensure...
 
 - Robert: I have had experience with some of the technologies used in the class. I'm also used to coding on my own, but I'd like to collaborate with others more. I am pretty good at debugging code and testing. If anyone wants to collaborate, we could use LiveShare to work on a problem together.
 
@@ -84,8 +84,9 @@ Every person on your team is an asset. This is your chance to discover the hidde
 
   - How will you communicate that it’s time to merge?
     - Whenever we do a pull request, we can let the team know to review and merge
+    - a final merge at the end of the day
 
 ### Links
 - [Github Repo](https://github.com/hugo-swag/jukebox-server)
 
-- [Trello Board](https://trello.com/invite/jukebox_401mid/ATTIacf76309c23592b447b81c5e01064556CEC1FA5A)
+- [Trello Board](https://trello.com/b/MZk5Ztu1/jukebox)
