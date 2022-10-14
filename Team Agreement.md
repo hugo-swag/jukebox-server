@@ -1,6 +1,9 @@
 # Team Hugo-Swag Team Agreement
 
+Robert, Jackson, Carlos, Brooke
+
 ## Cooperation Plan
+Every person on your team is an asset. This is your chance to discover the hidden strengths and areas for growth for each team member.
 - Brooke: My strength is working with data structures and planning out the flow of data. I think this could help with managing the queues for each room and with passing data between the server and the clients. I want to work on the professional competency of teamwork. I'm used to coding on my own, but the industry relies on groups of coders, so this is something I would like to get better at.
 
 - Carlos: My strength is team collaboration, big picture planning, and adaptability.
