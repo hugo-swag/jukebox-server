@@ -5,53 +5,53 @@ const playNextSong = require('../../server/MusicQueue/index.js');
 let bid = require('../../server/MusicQueue/index.js');
 
 let socket = {
-    emit: jest.fn(),
-    on: jest.fn(),
+  emit: jest.fn(),
+  on: jest.fn(),
 };
 
 const queue = {
-    test: 'testQueue',
+  test: 'testQueue',
 };
 
 const payload = {
-    test: 'testPayload',
+  test: 'testPayload',
 };
 
 jest.mock('chance', () => {
-    return jest.fn().mockImplementation(() => {
-        return {
-            guid: () => 'test-id',
-        };
-    });
+  return jest.fn().mockImplementation(() => {
+    return {
+      guid: () => 'test-id',
+    };
+  });
 });
 
 jest.mock('../../server/MusicQueue/index.js', () => {
-    return jest.fn().mockImplementation(() => {
-        return 'testQueue';
-    });
+  return jest.fn().mockImplementation(() => {
+    return 'testQueue';
+  });
 });
 
 describe('testing the socket', () => {
-    test('Should send the queue', () => {
-        removeSong();
-        console.log(io.socket.emit);
-        expect(socket.on).toBeTruthy();
-        expect(socket.emit).toBeTruthy();
-        expect(socket.emit).toHaveBeenCalledWith('test', {
-            test: 'test',
-        });
+  test('Should send the queue', () => {
+    removeSong();
+    console.log(io.socket.emit);
+    expect(socket.on).toBeTruthy();
+    expect(socket.emit).toBeTruthy();
+    expect(socket.emit).toHaveBeenCalledWith('test', {
+      test: 'test',
     });
+  });
 });
 
 describe('testing the socket', () => {
-    test('Should send the queue', () => {
-        playNextSong();
-        expect(socket.on).toBeTruthy();
-        expect(socket.emit).toBeTruthy();
-        expect(socket.emit).toHaveBeenCalledWith('update-queue', {
-            test: 'test',
-        });
+  test('Should send the queue', () => {
+    playNextSong();
+    expect(socket.on).toBeTruthy();
+    expect(socket.emit).toBeTruthy();
+    expect(socket.emit).toHaveBeenCalledWith('update-queue', {
+      test: 'test',
     });
+  });
 });
 
 describe('testing the bid handler', () => {
