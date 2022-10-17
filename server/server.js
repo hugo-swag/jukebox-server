@@ -48,12 +48,15 @@ io.on('connection', async (socket) => {
     socket.join(rooms.newRoom);
     console.log(`${socket.id} joined room ${rooms.newRoom}`);
 
-    const newQueue = new MusicQueue(rooms.newRoom);
-    queueList.push(newQueue);
-
-    io.sockets.emit('room-list', getRoomList());
-
-    io.to(socket.id).emit('update-queue', newQueue);
+    const oldQueue = queueList.find( q => q.queueName === rooms.newRoom);
+    if(!oldQueue) {
+      const newQueue = new MusicQueue(rooms.newRoom);
+      queueList.push(newQueue);
+      io.sockets.emit('room-list', getRoomList());
+      io.to(socket.id).emit('update-queue', newQueue);
+    } else {
+      io.to(socket.id).emit('update-queue', oldQueue);
+    }
   });
 
   // when a user joins, send them that rooms queue and current song

@@ -127,6 +127,7 @@ function addCreateRoomListener() {
   createRoomForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const newRoom = e.target.roomName.value;
+    e.target.roomName.value = '';
     socket.emit('create-room', {currentRoom: currentRoom, newRoom: newRoom});
     currentRoom = newRoom;
     currentRoomDisplay.innerHTML = `Current Room ${currentRoom}`;
