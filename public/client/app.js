@@ -12,6 +12,58 @@ let localQueue = [];
 let currentRoom = 'main';
 let roomList = [];
 
+let player = null;
+let player_id = null;
+let access_token = 'BQBkQfy8N6UgcvOw8HlSvWkx8QzLgjJKol1IxTmv49oeyXztg-9rNjffki35La1De1RwKe_o9iy40PiWKNzxGmmVhbuJUjS4wPPKHkS9I8IUI68QyzuACtDFgVHMv4AOdoWihaKYPwGQTmKjkqEEqO-2TNLVikLqoC9BVSmULYkqui3KTqa7yvhX1jvdjq0P';
+
+window.onSpotifyWebPlaybackSDKReady = () => {
+  // eslint-disable-next-line no-undef
+  player = new Spotify.Player({
+    name: 'Web Playback SDK Quick Start Player',
+    getOAuthToken: cb => { cb(access_token); },
+    volume: 0.5,
+  });
+	
+  player.addListener('ready', ({ device_id }) => {
+    console.log('Connected with Device ID', device_id);
+    player_id = device_id;
+    console.log(player_id);
+  });
+
+  player.addListener('not_ready', ({ device_id }) => {
+    console.log('Device ID has gone offline', device_id);
+  });
+
+  player.addListener('initialization_error', ({ message }) => { 
+    console.error(message);
+  });
+
+  player.addListener('authentication_error', ({ message }) => {
+    console.error(message);
+  });
+
+  player.addListener('account_error', ({ message }) => {
+    console.error(message);
+  });
+
+  player.connect();
+
+  document.getElementById('togglePlay').onclick = function() {
+    player.togglePlay();
+  };
+};
+
+const play = (uri) => {
+  fetch(`https://api.spotify.com/v1/me/player/play?device_id=${player_id}`, {
+    method: 'PUT',
+    body: JSON.stringify({ uris: [uri] }),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${access_token}`,
+    },
+  });
+};
+
 // get room list on initial connection, update the list when one is added
 socket.on('room-list', updatedList => {
   roomList = updatedList;
@@ -25,6 +77,7 @@ socket.on('update-playing-and-queue', (updatedQueue) => {
     if(localQueue.songList !== 0) {
       showPlaying(localQueue.songList[0]);
       updateQueueList();
+      play(localQueue.songList[0].uri);
     } 
   } catch(e) {
     console.log('empty song list, cannot update queue');
@@ -97,7 +150,6 @@ function handleBid(song, bid) {
 
 function getBidForm(song) {
   try {
-
     const input = document.createElement('input');
     input.type = 'number';
     input.min = '0';
@@ -114,8 +166,7 @@ function getBidForm(song) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       handleBid(song, e.target.existingSongBid.value);
-    });
-    
+    }); 
     return form;
   } catch(e) {
     console.log(e);
@@ -151,12 +202,3 @@ function showRoomList() {
     rooms.appendChild(roomLi);
   }
 }
-
-
-
-
-
-
-
-
-
