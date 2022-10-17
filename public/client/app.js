@@ -22,11 +22,11 @@ socket.on('room-list', updatedList => {
 socket.on('update-playing-and-queue', (updatedQueue) => {
   localQueue = updatedQueue;
   try {
-    if(localQueue.songList !== 0) {
+    if (localQueue.songList !== 0) {
       showPlaying(localQueue.songList[0]);
       updateQueueList();
-    } 
-  } catch(e) {
+    }
+  } catch (e) {
     console.log('empty song list, cannot update queue');
   }
 });
@@ -35,10 +35,10 @@ socket.on('update-playing-and-queue', (updatedQueue) => {
 socket.on('update-queue', (updatedQueue) => {
   localQueue = updatedQueue;
   try {
-    if(localQueue.songList) {
+    if (localQueue.songList) {
       updateQueueList();
-    } 
-  } catch(e) {
+    }
+  } catch (e) {
     console.log('empty song list, cannot update queue');
   }
 });
@@ -52,8 +52,8 @@ songForm.addEventListener('submit', (e) => {
   handleAddSong(name, artist, bid, 30000);
 });
 
-function handleAddSong (name, artist, bid, songLength) {
-  if(isNaN(bid)) bid = 0;
+function handleAddSong(name, artist, bid, songLength) {
+  if (isNaN(bid)) bid = 0;
   const song = {
     clientId: socket.id,
     name: name,
@@ -69,7 +69,7 @@ function updateQueueList() {
   queueDiv.innerHTML = '';
   const songList = localQueue.songList;
 
-  for(let index = 1; index < songList.length; index++) {
+  for (let index = 1; index < songList.length; index++) {
     const li = document.createElement('li');
     li.innerHTML = `${songList[index].name} by ${songList[index].artist}: current bid at ${songList[index].bid}`;
     const form = getBidForm(songList[index]);
@@ -79,7 +79,7 @@ function updateQueueList() {
 }
 
 function showPlaying(song) {
-  if(song) {
+  if (song) {
     nowPlayingHeader.innerHTML = `Now Playing: ${song.name} by ${song.artist}`;
   } else {
     nowPlayingHeader.innerHTML = 'Add Songs to Queue to Play Song';
@@ -89,7 +89,7 @@ function showPlaying(song) {
 }
 
 function handleBid(song, bid) {
-  if(!isNaN(parseInt(bid))) {
+  if (!isNaN(parseInt(bid))) {
     song.bid += parseInt(bid);
     socket.emit('bid', song);
   }
@@ -115,9 +115,9 @@ function getBidForm(song) {
       e.preventDefault();
       handleBid(song, e.target.existingSongBid.value);
     });
-    
+
     return form;
-  } catch(e) {
+  } catch (e) {
     console.log(e);
   }
 }
@@ -128,7 +128,7 @@ function addCreateRoomListener() {
     e.preventDefault();
     const newRoom = e.target.roomName.value;
     e.target.roomName.value = '';
-    socket.emit('create-room', {currentRoom: currentRoom, newRoom: newRoom});
+    socket.emit('create-room', { currentRoom: currentRoom, newRoom: newRoom });
     currentRoom = newRoom;
     currentRoomDisplay.innerHTML = `Current Room ${currentRoom}`;
     showPlaying();
@@ -137,7 +137,7 @@ function addCreateRoomListener() {
 addCreateRoomListener();
 
 function joinRoom(room) {
-  socket.emit('join-room', {currentRoom: currentRoom, newRoom: room});
+  socket.emit('join-room', { currentRoom: currentRoom, newRoom: room });
   currentRoom = room;
   currentRoomDisplay.innerHTML = `Current Room ${room}`;
 }
@@ -145,19 +145,10 @@ function joinRoom(room) {
 function showRoomList() {
   const rooms = document.querySelector('#rooms');
   rooms.innerHTML = '';
-  for(let room of roomList) {
+  for (let room of roomList) {
     const roomLi = document.createElement('li');
     roomLi.innerHTML = room;
     roomLi.addEventListener('click', () => joinRoom(room));
     rooms.appendChild(roomLi);
   }
 }
-
-
-
-
-
-
-
-
-
