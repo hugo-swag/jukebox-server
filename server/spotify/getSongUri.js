@@ -14,7 +14,7 @@ module.exports = async (songName, artist) => {
 
   try {
     let response = await axios(config);
-    return response.data.tracks.items[0].uri;
+    return {uri: response.data.tracks.items[0].uri, songLength: response.data.tracks.items[0].duration_ms};
   } catch(e) {
     console.log(e);
   }
