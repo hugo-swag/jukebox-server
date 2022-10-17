@@ -4,6 +4,8 @@ db
 temp
 build
 memory
+bundle.js
+bundle.js.map
 
 # Created by https://www.gitignore.io/api/vim,osx,node,linux,windows
 ### Linux ###

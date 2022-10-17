@@ -1,7 +1,10 @@
 'use strict';
+const SocketManager = require("./lib/SocketManager");
+
+
 
 // eslint-disable-next-line no-undef
-const socket = io();
+const socketManger = new SocketManager()
 const songForm = document.querySelector('#addSongForm');
 const queueDiv = document.querySelector('ol');
 const nowPlayingHeader = document.querySelector('#nowPlaying');
@@ -13,13 +16,14 @@ let currentRoom = 'main';
 let roomList = [];
 
 // get room list on initial connection, update the list when one is added
-socket.on('room-list', updatedList => {
+socketManger.onRoomList(updatedList => {
   roomList = updatedList;
   showRoomList();
-});
+})
 
 // only update the song playing when you enter and when the song changes
-socket.on('update-playing-and-queue', (updatedQueue) => {
+//socket.on('update-playing-and-queue', (updatedQueue) => {
+socketManger.onUpdatePlayingAndQueue((updatedQueue) => {
   localQueue = updatedQueue;
   try {
     if(localQueue.songList !== 0) {
@@ -32,7 +36,8 @@ socket.on('update-playing-and-queue', (updatedQueue) => {
 });
 
 // update the queue whenever songs are added and bided on
-socket.on('update-queue', (updatedQueue) => {
+//socket.on('update-queue', (updatedQueue) => {
+socketManger.onUpdateQueue((updatedQueue) => {
   localQueue = updatedQueue;
   try {
     if(localQueue.songList) {
@@ -55,14 +60,14 @@ songForm.addEventListener('submit', (e) => {
 function handleAddSong (name, artist, bid, songLength) {
   if(isNaN(bid)) bid = 0;
   const song = {
-    clientId: socket.id,
+    // clientId: socket.id,
     name: name,
     artist: artist,
     bid: bid,
     songLength: songLength,
     room: currentRoom,
   };
-  socket.emit('add', song);
+  socketManger.addSong(song);
 }
 
 function updateQueueList() {
@@ -91,7 +96,7 @@ function showPlaying(song) {
 function handleBid(song, bid) {
   if(!isNaN(parseInt(bid))) {
     song.bid += parseInt(bid);
-    socket.emit('bid', song);
+    socketManger.bidOnSong(song);
   }
 }
 
@@ -128,7 +133,7 @@ function addCreateRoomListener() {
     e.preventDefault();
     const newRoom = e.target.roomName.value;
     e.target.roomName.value = '';
-    socket.emit('create-room', {currentRoom: currentRoom, newRoom: newRoom});
+    socketManger.createRoom(newRoom, currentRoom);
     currentRoom = newRoom;
     currentRoomDisplay.innerHTML = `Current Room ${currentRoom}`;
     showPlaying();
@@ -137,7 +142,7 @@ function addCreateRoomListener() {
 addCreateRoomListener();
 
 function joinRoom(room) {
-  socket.emit('join-room', {currentRoom: currentRoom, newRoom: room});
+  socketManger.joinRoom(room, currentRoom);
   currentRoom = room;
   currentRoomDisplay.innerHTML = `Current Room ${room}`;
 }
