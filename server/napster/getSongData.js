@@ -1,7 +1,7 @@
 require('dotenv').config();
 const axios = require('axios');
 
-const NAPSTER_API_KEY = process.env.NAPSTER_API_KEY || 'ZGUzZTc3ZTUtYjg2NS00Mjc2LTgxM2UtM2QyY2YzOGQ2NTBm';
+const NAPSTER_API_KEY = process.env.NAPSTER_API_KEY;
 
 module.exports = async (songName, artist) => {
   const queryWords = [...songName.split(' '), ...artist.split(' ')];

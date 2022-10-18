@@ -75,7 +75,8 @@ function showSearchResults(searchResults) {
 
     const addSong = document.createElement('button');
     addSong.innerHTML = 'Select Song';
-    addSong.addEventListener('click', () => {
+    addSong.addEventListener('click', (e) => {
+      e.preventDefault();
       resultsDiv.innerHTML = '';
       handleAddSong(songData.name, songData.artist, songData.uri, bidInput.value);
     });
@@ -91,7 +92,8 @@ songForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const name = e.target.songName.value;
   const artist = e.target.artist.value;
-  handleSearchSong(name, artist);
+  handleSearchSong(name, artist, e);
+  return false;
 });
 
 function handleSearchSong(name, artist) {
@@ -134,7 +136,12 @@ function showPlaying(song) {
     nowPlayingHeader.innerHTML = 'Add Songs to Queue to Play Song';
   }
 
-  // add an audio tag and src from the data we get from napster api
+  const audioDiv = document.querySelector('#currentlyPlayingAudio');
+  audioDiv.innerHTML = '';
+  const audio = new Audio(song.uri);
+  audio.autoplay = true;
+  audioDiv.appendChild(audio);
+
 }
 
 function handleBid(song, bid) {
@@ -198,4 +205,8 @@ function showRoomList() {
     roomLi.addEventListener('click', () => joinRoom(room));
     rooms.appendChild(roomLi);
   }
+}
+
+function createSearchSongForm() {
+  
 }
