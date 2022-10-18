@@ -66,7 +66,7 @@ function showSearchResults(searchResults) {
     artist.innerHTML = songData.artist;
     li.appendChild(artist);
 
-    const bidInput = document.querySelector('input');
+    const bidInput = document.createElement('input');
     bidInput.type = 'number';
     bidInput.value = '0';
     bidInput.min = '0';

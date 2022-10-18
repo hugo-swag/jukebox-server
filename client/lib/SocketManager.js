@@ -17,8 +17,8 @@ class SocketManager {
       }
     });
     this.socket.on('search-results', (payload) => {
-      if (this.onReceiveSearchResults) {
-        this.onReceiveSearchResults(payload);
+      if (this.onReceiveSearchResultsCallback) {
+        this.onReceiveSearchResultsCallback(payload);
       }
     });
   }
@@ -69,7 +69,7 @@ class SocketManager {
   }
 
   onReceiveSearchResults(fn) {
-    this.onReceiveSearchResults = fn;
+    this.onReceiveSearchResultsCallback = fn;
   }
 }
 
