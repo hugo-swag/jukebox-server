@@ -15,6 +15,8 @@ app.use(express.static(publicPath));
 const Chance = require('chance');
 const chance = new Chance();
 
+const getSongData = require('./spotify/getSongUri');
+
 const MusicQueue = require('./MusicQueue/index');
 const mainQueue = new MusicQueue('main');
 
@@ -71,8 +73,13 @@ io.on('connection', async (socket) => {
 
   // when client adds a song, add it to queue
   // if a song is not playing, call playSong() to start it
-  socket.on('add', songToAdd => {
+  socket.on('add', async (songToAdd) => {
     songToAdd.songId = chance.guid();
+    const songData = await getSongData(songToAdd.name, songToAdd.artist);
+    songToAdd.uri = songData.uri;
+    songToAdd.songLength = songData.songLength;
+
+    console.log(songToAdd);
 
     const queue = findQueue(songToAdd.room);
     queue.addSong(songToAdd);

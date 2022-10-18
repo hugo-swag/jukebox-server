@@ -15,6 +15,58 @@ let localQueue = [];
 let currentRoom = 'main';
 let roomList = [];
 
+let player = null;
+let player_id = null;
+let access_token = '';
+
+window.onSpotifyWebPlaybackSDKReady = () => {
+  // eslint-disable-next-line no-undef
+  player = new Spotify.Player({
+    name: 'Web Playback SDK Quick Start Player',
+    getOAuthToken: cb => { cb(access_token); },
+    volume: 0.5,
+  });
+	
+  player.addListener('ready', ({ device_id }) => {
+    console.log('Connected with Device ID', device_id);
+    player_id = device_id;
+    console.log(player_id);
+  });
+
+  player.addListener('not_ready', ({ device_id }) => {
+    console.log('Device ID has gone offline', device_id);
+  });
+
+  player.addListener('initialization_error', ({ message }) => { 
+    console.error(message);
+  });
+
+  player.addListener('authentication_error', ({ message }) => {
+    console.error(message);
+  });
+
+  player.addListener('account_error', ({ message }) => {
+    console.error(message);
+  });
+
+  player.connect();
+
+  document.getElementById('togglePlay').onclick = function() {
+    player.togglePlay();
+  };
+};
+
+const play = (uri) => {
+  fetch(`https://api.spotify.com/v1/me/player/play?device_id=${player_id}`, {
+    method: 'PUT',
+    body: JSON.stringify({ uris: [uri] }),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${access_token}`,
+    },
+  });
+};
+
 // get room list on initial connection, update the list when one is added
 socketManger.onRoomList(updatedList => {
   roomList = updatedList;
@@ -26,11 +78,12 @@ socketManger.onRoomList(updatedList => {
 socketManger.onUpdatePlayingAndQueue((updatedQueue) => {
   localQueue = updatedQueue;
   try {
-    if(localQueue.songList !== 0) {
+    if (localQueue.songList !== 0) {
       showPlaying(localQueue.songList[0]);
       updateQueueList();
+      play(localQueue.songList[0].uri);
     } 
-  } catch(e) {
+  } catch (e) {
     console.log('empty song list, cannot update queue');
   }
 });
@@ -40,10 +93,10 @@ socketManger.onUpdatePlayingAndQueue((updatedQueue) => {
 socketManger.onUpdateQueue((updatedQueue) => {
   localQueue = updatedQueue;
   try {
-    if(localQueue.songList) {
+    if (localQueue.songList) {
       updateQueueList();
-    } 
-  } catch(e) {
+    }
+  } catch (e) {
     console.log('empty song list, cannot update queue');
   }
 });
@@ -57,8 +110,8 @@ songForm.addEventListener('submit', (e) => {
   handleAddSong(name, artist, bid, 30000);
 });
 
-function handleAddSong (name, artist, bid, songLength) {
-  if(isNaN(bid)) bid = 0;
+function handleAddSong(name, artist, bid, songLength) {
+  if (isNaN(bid)) bid = 0;
   const song = {
     // clientId: socket.id,
     name: name,
@@ -74,7 +127,7 @@ function updateQueueList() {
   queueDiv.innerHTML = '';
   const songList = localQueue.songList;
 
-  for(let index = 1; index < songList.length; index++) {
+  for (let index = 1; index < songList.length; index++) {
     const li = document.createElement('li');
     li.innerHTML = `${songList[index].name} by ${songList[index].artist}: current bid at ${songList[index].bid}`;
     const form = getBidForm(songList[index]);
@@ -84,7 +137,7 @@ function updateQueueList() {
 }
 
 function showPlaying(song) {
-  if(song) {
+  if (song) {
     nowPlayingHeader.innerHTML = `Now Playing: ${song.name} by ${song.artist}`;
   } else {
     nowPlayingHeader.innerHTML = 'Add Songs to Queue to Play Song';
@@ -94,7 +147,7 @@ function showPlaying(song) {
 }
 
 function handleBid(song, bid) {
-  if(!isNaN(parseInt(bid))) {
+  if (!isNaN(parseInt(bid))) {
     song.bid += parseInt(bid);
     socketManger.bidOnSong(song);
   }
@@ -102,7 +155,6 @@ function handleBid(song, bid) {
 
 function getBidForm(song) {
   try {
-
     const input = document.createElement('input');
     input.type = 'number';
     input.min = '0';
@@ -120,9 +172,8 @@ function getBidForm(song) {
       e.preventDefault();
       handleBid(song, e.target.existingSongBid.value);
     });
-    
     return form;
-  } catch(e) {
+  } catch (e) {
     console.log(e);
   }
 }
@@ -150,19 +201,10 @@ function joinRoom(room) {
 function showRoomList() {
   const rooms = document.querySelector('#rooms');
   rooms.innerHTML = '';
-  for(let room of roomList) {
+  for (let room of roomList) {
     const roomLi = document.createElement('li');
     roomLi.innerHTML = room;
     roomLi.addEventListener('click', () => joinRoom(room));
     rooms.appendChild(roomLi);
   }
 }
-
-
-
-
-
-
-
-
-
