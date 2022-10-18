@@ -134,9 +134,11 @@ function showPlaying(song) {
 
   const audioDiv = document.querySelector('#currentlyPlayingAudio');
   audioDiv.innerHTML = '';
+  console.log(song.uri);
   const audio = new Audio(song.uri);
   audio.autoplay = true;
   audioDiv.appendChild(audio);
+  console.log(audio);
 
 }
 
