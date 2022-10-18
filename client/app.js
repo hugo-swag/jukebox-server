@@ -100,10 +100,11 @@ function handleSearchSong(e) {
 }
 
 function handleAddSong(name, artist, uri, bid) {
+  let intBid = parseInt(bid);
   const song = {
     name: name,
     artist: artist,
-    bid: bid,
+    bid:intBid,
     uri: uri,
     room: currentRoom,
     songLength: 30000,
@@ -140,10 +141,9 @@ function showPlaying(song) {
 }
 
 function handleBid(song, bid) {
-  if (!isNaN(parseInt(bid))) {
-    song.bid += parseInt(bid);
-    socketManger.bidOnSong(song);
-  }
+  const intBid = parseInt(bid);
+  song.bid += intBid;
+  socketManger.bidOnSong(song);
 }
 
 function getBidForm(song) {
