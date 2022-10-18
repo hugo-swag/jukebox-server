@@ -73,7 +73,13 @@ function showSearchResults(searchResults) {
     bidInput.id = 'bid';
     li.appendChild(bidInput);
 
-    
+    const addSong = document.createElement('button');
+    addSong.innerHTML = 'Select Song';
+    addSong.addEventListener('click', () => {
+      resultsDiv.innerHTML = '';
+      handleAddSong(songData.name, songData.artist, songData.uri, bidInput.value);
+    });
+    li.appendChild(addSong);
 
     ol.appendChild(li);
   });
@@ -94,6 +100,18 @@ function handleSearchSong(name, artist) {
     artist: artist,
   };
   socketManger.searchSong(song);
+}
+
+function handleAddSong(name, artist, uri, bid) {
+  const song = {
+    name: name,
+    artist: artist,
+    bid: bid,
+    uri: uri,
+    room: currentRoom,
+    songLength: 30000,
+  };
+  socketManger.addSong(song);
 }
 
 function updateQueueList() {

@@ -38,6 +38,7 @@ class SocketManager {
   //   name: name,
   //   artist: artist,
   //   bid: bid,
+  //   uri: uri,
   //   songLength: songLength,
   //   room: currentRoom,
   // };
