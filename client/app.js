@@ -1,7 +1,7 @@
 'use strict';
-const SocketManager = require("./lib/SocketManager");
+const SocketManager = require('./lib/SocketManager');
 
-
+require('./Components/Login');
 
 // eslint-disable-next-line no-undef
 const socketManger = new SocketManager()
@@ -26,7 +26,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     getOAuthToken: cb => { cb(access_token); },
     volume: 0.5,
   });
-	
+
   player.addListener('ready', ({ device_id }) => {
     console.log('Connected with Device ID', device_id);
     player_id = device_id;
@@ -37,7 +37,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     console.log('Device ID has gone offline', device_id);
   });
 
-  player.addListener('initialization_error', ({ message }) => { 
+  player.addListener('initialization_error', ({ message }) => {
     console.error(message);
   });
 
@@ -51,7 +51,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 
   player.connect();
 
-  document.getElementById('togglePlay').onclick = function() {
+  document.getElementById('togglePlay').onclick = function () {
     player.togglePlay();
   };
 };
@@ -82,7 +82,7 @@ socketManger.onUpdatePlayingAndQueue((updatedQueue) => {
       showPlaying(localQueue.songList[0]);
       updateQueueList();
       play(localQueue.songList[0].uri);
-    } 
+    }
   } catch (e) {
     console.log('empty song list, cannot update queue');
   }
