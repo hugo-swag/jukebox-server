@@ -6,7 +6,6 @@ const NAPSTER_API_KEY = process.env.NAPSTER_API_KEY || 'ZGUzZTc3ZTUtYjg2NS00Mjc2
 module.exports = async (songName, artist) => {
   const queryWords = [...songName.split(' '), ...artist.split(' ')];
   const queryString = queryWords.join('+');
-  console.log(queryString);
 
   const config = {
     method: 'get',
