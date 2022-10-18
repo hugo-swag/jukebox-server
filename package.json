@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --verbose --coverage",
+    "test": "NODE_ENV=test jest --verbose --coverage --runInBand",
     "start": "npm run build; node index.js",
-    "start-dev": "npm run build; nodemon index.js",
+    "start-dev": "NODE_ENV=DEVELOPMENT npm run build; nodemon index.js",
     "build": "esbuild client/app.js --bundle --sourcemap --outfile=public/bundle.js"
   },
   "repository": {
