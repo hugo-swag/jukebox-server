@@ -80,7 +80,7 @@ io.on('connection', async (socket) => {
   // when client adds a song, add it to queue
   // if a song is not playing, call playSong() to start it
   socket.on('add', songToAdd => {
-
+    songToAdd.songId = chance.guid();
     const queue = findQueue(songToAdd.room);
     queue.addSong(songToAdd);
     io.to(queue.queueName).emit('update-queue', queue);

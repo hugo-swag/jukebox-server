@@ -88,18 +88,13 @@ function showSearchResults(searchResults) {
 }
 
 
-songForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const name = e.target.songName.value;
-  const artist = e.target.artist.value;
-  handleSearchSong(name, artist, e);
-  return false;
-});
+songForm.addEventListener('submit', handleSearchSong);
 
-function handleSearchSong(name, artist) {
+function handleSearchSong(e) {
+  e.preventDefault();
   const song = {
-    name: name,
-    artist: artist,
+    name: e.target.songName.value,
+    artist: e.target.artist.value,
   };
   socketManger.searchSong(song);
 }
@@ -205,8 +200,4 @@ function showRoomList() {
     roomLi.addEventListener('click', () => joinRoom(room));
     rooms.appendChild(roomLi);
   }
-}
-
-function createSearchSongForm() {
-  
 }
