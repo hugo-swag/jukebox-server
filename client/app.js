@@ -2,6 +2,7 @@
 const SocketManager = require('./lib/SocketManager');
 
 require('./Components/Login');
+require('./Components/insertComponents');
 
 // eslint-disable-next-line no-undef
 const socketManger = new SocketManager()

@@ -14,6 +14,8 @@ let server = http.createServer(app);
 let io = socketIO(server);
 
 app.use(cookieParser())
+const causesRoutes = require('./routes/causes/index');
+app.use(causesRoutes);
 app.use(express.static(publicPath));
 
 const Chance = require('chance');

@@ -37,7 +37,8 @@ describe('Causes Routes', () => {
     const causeObj = {
       name: 'Animal Shelter Create'
     }
-    await request(app).post('/causes/new').send(causeObj);
+    const postResp = await request(app).post('/causes/new').send(causeObj);
+    expect(postResp.body).toEqual(expect.objectContaining({name: "Animal Shelter Create"}));
     const resp = await request(app).get('/causes/1');
     expect(resp.body).toEqual(expect.objectContaining({name: "Animal Shelter Create"}));
   });
