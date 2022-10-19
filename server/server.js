@@ -6,15 +6,17 @@ const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
 
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const userRoutes = require('./routes/auth/');
 
 const publicPath = path.join(__dirname, './../public');
 let app = express();
 let server = http.createServer(app);
 let io = socketIO(server);
 
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(express.static(publicPath));
+app.use(userRoutes);
 
 const Chance = require('chance');
 const chance = new Chance();
@@ -103,6 +105,7 @@ io.on('connection', async (socket) => {
     io.to(songWithNewBid.room).emit('update-queue', queue);
   });
 
+  
   // play song sets is Running is true, so that playSong is not called again when a song is added
   // it sets a timeout according to the duration of the song, after timeout, calls play next song
   function playSong(queue) {

@@ -13,22 +13,22 @@ app.use(routes);
 describe('Causes Routes', () => {
 
   beforeEach(async () => {
-    await sequelize.sync({ force: true })
+    await sequelize.sync({ force: true }),
   })
 
   test('should get a cause', async () => {
     const controller = new CausesController();
-    await controller.createCause({name: "Animal Shelter"}, 1);
+    await controller.createCause({name: 'Animal Shelter'}, 1);
     const resp = await request(app).get('/causes/1');
-    expect(resp.body).toEqual(expect.objectContaining({name: "Animal Shelter"}));
+    expect(resp.body).toEqual(expect.objectContaining({name: 'Animal Shelter'}));
   });
 
   test('should get a list of causes', async () => {
     const controller = new CausesController();
-    await controller.createCause({name: "Animal Shelter 1"}, 1);
-    await controller.createCause({name: "Animal Shelter 2 "}, 1);
-    await controller.createCause({name: "Animal Shelter 3"}, 1);
-    await controller.createCause({name: "Animal Shelter 4"}, 1);
+    await controller.createCause({name: 'Animal Shelter 1'}, 1);
+    await controller.createCause({name: 'Animal Shelter 2 '}, 1);
+    await controller.createCause({name: 'Animal Shelter 3'}, 1);
+    await controller.createCause({name: 'Animal Shelter 4'}, 1);
     const resp = await request(app).get('/causes');
     expect(resp.body.length).toBe(4);
   });
