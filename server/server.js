@@ -8,6 +8,7 @@ const socketIO = require('socket.io');
 
 const cookieParser = require('cookie-parser');
 const userRoutes = require('./routes/auth/');
+const bearer = require('./auth/middleware/bearer');
 
 const publicPath = path.join(__dirname, './../public');
 let app = express();
@@ -40,6 +41,7 @@ const getRoomList = () => {
   }, []);
 };
 
+io.use(bearer);
 io.on('connection', async (socket) => {
 
   let isRunning = false;

@@ -3,7 +3,7 @@ const router = express.Router();
 const Users = require('../../models/user.js');
 const basic = require('../../auth/middleware/basic.js');
 
-
+router.use(express.json());
 //create users route
 router.post('/user/signup', async (req, res) => {
   try {
@@ -22,6 +22,7 @@ router.post('/user/signup', async (req, res) => {
 router.post('/user/signin', basic, async(req,res)=> {
   try{
     res.send(req.user);
+    console.log(req.user);
   }catch(err){
     console.log('failed to in sign');
     res.status(400).send(err);
