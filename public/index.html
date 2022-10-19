@@ -8,8 +8,10 @@
   <title>Jukebox</title>
 </head>
 <body>
-    <h1>Welcome to Online Jukebox</h1>
-
+    <h1>Welcome to Online Jukebox <span id="username-container"></span></h1>
+    <div id="login-container">
+       <input type="text" placeholder="username" id="username-input" /> 
+       <button id="login-button">Login</button></div>
     <div>
       <h2>Rooms</h2>
       <form id="createRoomForm">
@@ -46,7 +48,6 @@
     
     <ol></ol>
 
-  
-    <script src="./bundle.js"></script>
+  <script src="./bundle.js"></script>
   </body>
 </html>

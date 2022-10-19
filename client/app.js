@@ -1,6 +1,7 @@
 'use strict';
-
 const SocketManager = require('./lib/SocketManager');
+
+require('./Components/Login');
 
 // eslint-disable-next-line no-undef
 const socketManger = new SocketManager();

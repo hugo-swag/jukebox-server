@@ -6,6 +6,7 @@ build
 memory
 bundle.js
 bundle.js.map
+*.sqlite
 
 # Created by https://www.gitignore.io/api/vim,osx,node,linux,windows
 ### Linux ###

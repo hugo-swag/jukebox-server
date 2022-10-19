@@ -1,15 +1,19 @@
 'use strict';
+const Users = require('./models/user');
 
 const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
 
+const cookieParser = require('cookie-parser')
+
 const publicPath = path.join(__dirname, './../public');
 let app = express();
 let server = http.createServer(app);
 let io = socketIO(server);
 
+app.use(cookieParser())
 app.use(express.static(publicPath));
 
 const Chance = require('chance');
@@ -50,8 +54,8 @@ io.on('connection', async (socket) => {
     socket.join(rooms.newRoom);
     console.log(`${socket.id} joined room ${rooms.newRoom}`);
 
-    const oldQueue = queueList.find( q => q.queueName === rooms.newRoom);
-    if(!oldQueue) {
+    const oldQueue = queueList.find(q => q.queueName === rooms.newRoom);
+    if (!oldQueue) {
       const newQueue = new MusicQueue(rooms.newRoom);
       queueList.push(newQueue);
       io.sockets.emit('room-list', getRoomList());
@@ -86,7 +90,7 @@ io.on('connection', async (socket) => {
     io.to(queue.queueName).emit('update-queue', queue);
     console.log(`${songToAdd.songId} added to queue`);
 
-    if(!isRunning) {
+    if (!isRunning) {
       playSong(queue);
       io.to(songToAdd.room).emit('update-playing-and-queue', queue);
     } else io.to(songToAdd.room).emit('update-queue', queue);
@@ -112,7 +116,7 @@ io.on('connection', async (socket) => {
   // plays the next song if there is one, sets isRunning to false if there isn't one
   function playNextSong(queue) {
     removeSong(queue);
-    if(queue.songList.length !== 0) playSong(queue);
+    if (queue.songList.length !== 0) playSong(queue);
     else isRunning = false;
   }
 
@@ -121,13 +125,13 @@ io.on('connection', async (socket) => {
     const removedSong = queue.removeSong();
     try {
       console.log(`${removedSong.songId} removed from queue`);
-    } catch(e) {console.log('No more songs to remove');}
+    } catch (e) { console.log('No more songs to remove'); }
     io.to(queue.queueName).emit('update-playing-and-queue', queue);
   }
 });
 
 module.exports = {
-  server:server,
+  server: server,
   start: PORT => {
     server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
   },
