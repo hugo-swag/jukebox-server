@@ -5,7 +5,7 @@ class CausesController{
     this.db = db;
   }
 
-  async index(userId, limit, offset) {
+  async indexForUser(userId, limit, offset) {
     offset = offset || 0;
     limit = limit || 10;
     const causes = await Recipient.findAll({where: {manager: userId}, offset, limit});
@@ -18,11 +18,12 @@ class CausesController{
   }
 
   async createCause(causeObj, userId) {
-    return Recipient.create({...causeObj, manager: userId});
+    return await Recipient.create({...causeObj, manager: userId});
   }
 
-  async deleteCause(causeId) {
-    return Recipient.destroy({where: {id: causeId}});
+  async deleteCause(causeId, userId) {
+    //return Recipient.destroy({where: {id: causeId, manager: userId}});
+    return await Recipient.destroy({where: {id: causeId}});
   }
 
 }
