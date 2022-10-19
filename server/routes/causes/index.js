@@ -9,7 +9,7 @@ router.get('/causes', async(req, res) => {
   const controller = new CausesController();
   const userId = req.user.id;
   try{
-    const causes = await controller.index(userId);
+    const causes = await controller.indexForUser(userId);
     res.json(causes);
   } catch (e) {
     console.error(e);
