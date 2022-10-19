@@ -1,17 +1,20 @@
 'use strict';
-const Users = require('./models/user');
-
+require('dotenv').config();
+const STATIC_SERVER = process.env.STATIC_SERVER;
 const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
-
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 
 const publicPath = path.join(__dirname, './../public');
 let app = express();
 let server = http.createServer(app);
-let io = socketIO(server);
+let io = new socketIO.Server(server, {
+  cors: {
+    origin: STATIC_SERVER,
+  }});
+
 
 app.use(cookieParser())
 app.use(express.static(publicPath));
