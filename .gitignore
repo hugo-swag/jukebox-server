@@ -1,5 +1,6 @@
 # 401 JS
 db
+db.sqlite
 .env
 temp
 build
