@@ -13,6 +13,41 @@
        <input type="text" placeholder="username" id="username-input" /> 
        <button id="login-button">Login</button></div>
     <div>
+
+      <form id="signup">
+        <fieldset>
+          <legend>Sign Up</legend>
+          <p>
+            <label for="username">Username</label>
+            <input type="text" id="username" />
+          </p>
+
+          <p>
+            <label for="password">Password</label>
+            <input type="text" id="password" />
+          </p>
+
+          <input type="submit"/>
+        </fieldset>
+      </form>
+
+      <form id="signin">
+        <fieldset>
+          <legend>Sign In</legend>
+          <p>
+            <label for="username-existing">Username</label>
+            <input type="text" id="username-existing" />
+          </p>
+
+          <p>
+            <label for="password-existing">Password</label>
+            <input type="text" id="password-existing" />
+          </p>
+
+          <input type="submit"/>
+        </fieldset>
+      </form>
+
       <h2>Rooms</h2>
       <form id="createRoomForm">
         <label for="roomName">Room Name: </label>
@@ -47,7 +82,7 @@
     <div id="currentlyPlayingAudio"></div>
     
     <ol></ol>
-
+  
   <script src="./bundle.js"></script>
   </body>
 </html>

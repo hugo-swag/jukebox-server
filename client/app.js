@@ -3,6 +3,8 @@
 const SocketManager = require('./lib/SocketManager');
 
 require('./Components/Login');
+require('./Components/signup');
+require('./Components/signin');
 
 // eslint-disable-next-line no-undef
 const socketManger = new SocketManager();
