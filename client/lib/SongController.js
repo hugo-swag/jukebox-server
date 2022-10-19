@@ -1,9 +1,9 @@
 
 class SongController{
-    constructor(socketManager){
-        this.socketManager = socketManager;
-    }
-    addSong(song){
+  constructor(socketManager){
+    this.socketManager = socketManager;
+  }
+  addSong(song){
 
-    }
+  }
 }

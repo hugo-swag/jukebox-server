@@ -10,10 +10,15 @@ class SocketManager {
     });
     this.socket.on('update-playing-and-queue', (payload) => {
       if (this.onUpdatePlayingAndQueueCallback) { this.onUpdatePlayingAndQueueCallback(payload); }
-    })
+    });
     this.socket.on('update-queue', (payload) => {
       if (this.onUpdateQueueCallback) {
         this.onUpdateQueueCallback(payload);
+      }
+    });
+    this.socket.on('search-results', (payload) => {
+      if (this.onReceiveSearchResultsCallback) {
+        this.onReceiveSearchResultsCallback(payload);
       }
     });
   }
@@ -33,9 +38,15 @@ class SocketManager {
   //   name: name,
   //   artist: artist,
   //   bid: bid,
+  //   uri: uri,
   //   songLength: songLength,
   //   room: currentRoom,
   // };
+
+  searchSong(song) {
+    this.socket.emit('search-song', song);
+  }
+
   addSong(song) {
     song.clientId = this.socket.id;
     this.socket.emit('add', song);
@@ -55,6 +66,10 @@ class SocketManager {
 
   onUpdateQueue(fn) {
     this.onUpdateQueueCallback = fn;
+  }
+
+  onReceiveSearchResults(fn) {
+    this.onReceiveSearchResultsCallback = fn;
   }
 }
 

@@ -21,7 +21,7 @@ app.use(express.static(publicPath));
 const Chance = require('chance');
 const chance = new Chance();
 
-const getSongData = require('./spotify/getSongUri');
+const getSongData = require('./napster/getSongData');
 
 const MusicQueue = require('./MusicQueue/index');
 const mainQueue = new MusicQueue('main');
@@ -77,16 +77,16 @@ io.on('connection', async (socket) => {
     io.to(socket.id).emit('update-playing-and-queue', queue);
   });
 
+  socket.on('search-song', async (songData) => {
+    const songSearchData = await getSongData(songData.name, songData.artist);
+    console.log(songSearchData);
+    io.to(socket.id).emit('search-results', songSearchData);
+  });
+
   // when client adds a song, add it to queue
   // if a song is not playing, call playSong() to start it
-  socket.on('add', async (songToAdd) => {
+  socket.on('add', songToAdd => {
     songToAdd.songId = chance.guid();
-    const songData = await getSongData(songToAdd.name, songToAdd.artist);
-    songToAdd.uri = songData.uri;
-    songToAdd.songLength = songData.songLength;
-
-    console.log(songToAdd);
-
     const queue = findQueue(songToAdd.room);
     queue.addSong(songToAdd);
     io.to(queue.queueName).emit('update-queue', queue);
