@@ -32,9 +32,6 @@ describe('Causes Controller', () => {
   });
   
   test('should index causes for a user', async () => {
-    const causeObj = {
-      name: "Animal Shelter"
-    }
     const controller = new CausesController();
     await controller.createCause({
       name: "Animal Shelter"
@@ -48,7 +45,7 @@ describe('Causes Controller', () => {
     await controller.createCause({
       name: "Hospital 1"
     }, 2);
-    const causes = await controller.index(1);
+    const causes = await controller.indexForUser(1);
     expect(causes.length).toBe(3);
   });
 });
