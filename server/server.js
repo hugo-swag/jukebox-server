@@ -9,6 +9,8 @@ const socketIO = require('socket.io');
 const cookieParser = require('cookie-parser');
 const userRoutes = require('./routes/auth/');
 const bearer = require('./auth/middleware/bearer');
+const errorHandler = require('./errorhandler/500');
+const notFoundHandler = require('./errorhandler/404');
 
 const publicPath = path.join(__dirname, './../public');
 let app = express();
@@ -134,6 +136,9 @@ io.on('connection', async (socket) => {
     io.to(queue.queueName).emit('update-playing-and-queue', queue);
   }
 });
+
+app.use('*', notFoundHandler);
+app.use(errorHandler);
 
 module.exports = {
   server: server,

@@ -2,16 +2,14 @@
 
 const users = require('../../models/user');
 
-module.exports = async (req, res, next) => {
+module.exports = async (socket, next) => {
 
   try {
 
-    if (!req.headers.authorization) { _authError(); }
-    //takes in a variable in  the header called authorization that has the token given when you sign in, we de
-    const token = req.headers.authorization.split(' ').pop();
-    const validUser = await users.authenticateToken(token);
-    req.user = validUser;
-    req.token = validUser.token;
+    if (!socket.token) { _authError(); }
+    //takes in a variable in  the header called token that has the token given when you sign in
+    const validUser = await users.authenticateToken(socket.token);
+    socket.user = validUser;
     //req 
     next();
 
@@ -20,6 +18,6 @@ module.exports = async (req, res, next) => {
   }
 
   function _authError() {
-    next('Invalid Login');
+    next('Invalid login');
   }
 };
