@@ -73,7 +73,6 @@ io.on('connection', async (socket) => {
 
   socket.on('search-song', async (songData) => {
     const songSearchData = await getSongData(songData.name, songData.artist);
-    console.log(songSearchData);
     io.to(socket.id).emit('search-results', songSearchData);
   });
 
