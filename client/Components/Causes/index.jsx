@@ -29,17 +29,31 @@ class CausesController {
     return body;
   }
 
+  async deleteCause(cause) {
+    const resp = await fetch(`/causes/${cause.id}`, {
+      method: 'DELETE',
+      credentials: 'include'
+    });
+    const body = await resp.json();
+    return body;
+  }
+
 }
 
 class Cause extends Component {
   constructor(props) {
     super(props);
+    this.onClickDelete = this.onClickDelete.bind(this);
   }
   state = {  }
+  onClickDelete(e) {
+    e.preventDefault();
+    this.props.onDeleteCause(this.props.cause);
+  }
   render() { 
     return (
       <div>
-        Cause: {this.props.cause.name}
+        Cause: {this.props.cause.name} <a href="#" onClick={this.onClickDelete}>X</a>
       </div>
       );
   }
@@ -52,6 +66,7 @@ class Causes extends Component {
     this.controller = new CausesController();
     this.onClickNewCause = this.onClickNewCause.bind(this);
     this.onClickCreateCause = this.onClickCreateCause.bind(this);
+    this.onDeleteCause = this.onDeleteCause.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
@@ -71,6 +86,14 @@ class Causes extends Component {
     this.setState({...this.state, addCauseOpen: true})
   }
 
+  async onDeleteCause(cause) {
+    await this.controller.deleteCause(cause);
+    const causes = this.state.causes;
+    const idx = causes.findIndex((c)=> c.id === cause.id);
+    causes.splice(idx, 1);
+    this.setState({...this.state, causes});
+  }
+
   onChange(e){
     const value = e.target.value;
     const name = e.target.name;
@@ -83,7 +106,7 @@ class Causes extends Component {
     return ( <div>
       <h1>My Causes</h1>
       <ul>
-        {this.state.causes.map(cause=>(<Cause key={cause.id} cause={cause}/>))}
+        {this.state.causes.map(cause=>(<Cause key={cause.id} onDeleteCause={this.onDeleteCause} cause={cause}/>))}
         {this.state.addCauseOpen ? 
            <><input type='text' onChange={this.onChange} name='newCause' placeholder='My Cause' /><button onClick={this.onClickCreateCause}> Submit </button></>
          :<li onClick={this.onClickNewCause}> New Cause +</li>
