@@ -4,6 +4,7 @@ require('dotenv').config();
 const STATIC_SERVER_URL = process.env.STATIC_SERVER_URL;
 console.log(STATIC_SERVER_URL);
 
+
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
@@ -33,6 +34,11 @@ app.use("/api/v1", causesRoutes);
 // app.use(express.static(publicPath));
 
 app.use(userRoutes);
+
+const causesRoutes = require('./routes/causes');
+app.use("/api/v1", causesRoutes);
+
+// app.use(express.static(publicPath));
 
 const Chance = require('chance');
 const chance = new Chance();

@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const CausesController = require('./controller');
-// const auth = require('../../../middleware/auth');
 const auth = require('../../auth/middleware/auth');
 
 router.use(auth);
