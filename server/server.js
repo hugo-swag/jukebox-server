@@ -1,24 +1,23 @@
 'use strict';
-const Users = require('./models/user');
 
-const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
-
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
+
 const userRoutes = require('./routes/auth/');
 const bearer = require('./auth/middleware/bearer');
 const errorHandler = require('./errorhandler/500');
 const notFoundHandler = require('./errorhandler/404');
 
-const publicPath = path.join(__dirname, './../public');
 let app = express();
 let server = http.createServer(app);
 let io = socketIO(server);
 
 app.use(cookieParser());
-app.use(express.static(publicPath));
+app.use(cors());
+
 app.use(userRoutes);
 
 const Chance = require('chance');
@@ -135,6 +134,10 @@ io.on('connection', async (socket) => {
     } catch (e) { console.log('No more songs to remove'); }
     io.to(queue.queueName).emit('update-playing-and-queue', queue);
   }
+});
+
+app.get('/', (req, res) => {
+  res.status(200).send('Welcome to my server');
 });
 
 app.use('*', notFoundHandler);

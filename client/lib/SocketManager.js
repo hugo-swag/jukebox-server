@@ -3,8 +3,8 @@ const io = require('socket.io-client');
 
 
 class SocketManager {
-  constructor() {
-    this.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJyb29rZSIsImlhdCI6MTY2NjIxNTk5OX0.TNu6X-aUBQ2e6-wWqw9_vNFgCG7LWBNYt1q4dW3jnq8';
+  constructor(token) {
+    this.token = token;
     this.socket = io('http://localhost:3000',
       {
         auth: {

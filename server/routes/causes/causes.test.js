@@ -7,14 +7,14 @@ const CausesController = require('./controller');
 
 const app = express();
 
-app.use(express.json())
+app.use(express.json());
 app.use(routes);
 
 describe('Causes Routes', () => {
 
   beforeEach(async () => {
-    await sequelize.sync({ force: true }),
-  })
+    await sequelize.sync({ force: true });
+  });
 
   test('should get a cause', async () => {
     const controller = new CausesController();
@@ -35,18 +35,18 @@ describe('Causes Routes', () => {
 
   test('should create a cause', async () => {
     const causeObj = {
-      name: 'Animal Shelter Create'
-    }
+      name: 'Animal Shelter Create',
+    };
     await request(app).post('/causes/new').send(causeObj);
     const resp = await request(app).get('/causes/1');
-    expect(resp.body).toEqual(expect.objectContaining({name: "Animal Shelter Create"}));
+    expect(resp.body).toEqual(expect.objectContaining({name: 'Animal Shelter Create'}));
   });
   
   test('should delete a cause', async () => {
     const controller = new CausesController();
-    await controller.createCause({name: "Animal Shelter"}, 1);
+    await controller.createCause({name: 'Animal Shelter'}, 1);
     const resp = await request(app).get('/causes/1');
-    expect(resp.body).toEqual(expect.objectContaining({name: "Animal Shelter"}));
+    expect(resp.body).toEqual(expect.objectContaining({name: 'Animal Shelter'}));
     await request(app).delete('/causes/1');
     //const resp2 = await request(app).get('/causes/1');
     //expect(resp2.body).toEqual(expect.not.objectContaining({name: "Animal Shelter"}));

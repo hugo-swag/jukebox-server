@@ -9,9 +9,9 @@ router.post('/user/signup', async (req, res) => {
   try {
     let userRecord = await Users.create(req.body);
     console.log('Created a new user', userRecord);
-    res.send(userRecord);
+    res.status(201).send(userRecord);
   } catch (err) {
-    console.log(err.message);
+    res.status(400).send('Invalid Request');
   }
 });
 
@@ -21,11 +21,11 @@ router.post('/user/signup', async (req, res) => {
 
 router.post('/user/signin', basic, async(req,res)=> {
   try{
-    res.send(req.user);
+    res.status(200).send(req.user);
     console.log(req.user);
   }catch(err){
     console.log('failed to in sign');
-    res.status(400).send(err);
+    res.status(400).send('Invalid Login');
   }
 });
 
