@@ -35,11 +35,6 @@ app.use("/api/v1", causesRoutes);
 
 app.use(userRoutes);
 
-const causesRoutes = require('./routes/causes');
-app.use("/api/v1", causesRoutes);
-
-// app.use(express.static(publicPath));
-
 const Chance = require('chance');
 const chance = new Chance();
 
