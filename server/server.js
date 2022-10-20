@@ -1,5 +1,6 @@
 'use strict';
-
+require('dotenv').config();
+const STATIC_SERVER_URL = process.env.STATIC_SERVER_URL;
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
@@ -13,7 +14,10 @@ const notFoundHandler = require('./errorhandler/404');
 
 let app = express();
 let server = http.createServer(app);
-let io = new socketIO.Server(server);
+let io = new socketIO.Server(server, {
+  cors: {
+    origin: STATIC_SERVER_URL,
+  }});
 
 
 app.use(cookieParser());
