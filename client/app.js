@@ -1,4 +1,5 @@
 'use strict';
+
 const SocketManager = require('./lib/SocketManager');
 
 require('./Components/Login');

@@ -12,6 +12,6 @@ module.exports = function(req, res, next) {
   }
   req.user = user;
   */
-  req.user = {username: 'user1', id: 1}
+  req.user = {username: 'user1', id: 1};
   next();
-}
+};

@@ -1,8 +1,17 @@
 const io = require('socket.io-client');
 
+
+
 class SocketManager {
-  constructor() {
-    this.socket = io();
+  constructor(token) {
+    this.token = token;
+    this.socket = io('http://localhost:3000',
+      {
+        auth: {
+          token: this.token,
+        },
+      },
+    );
     this.socket.on('room-list', (payload) => {
       if (this.onRoomListCallback) {
         this.onRoomListCallback(payload);
@@ -20,6 +29,9 @@ class SocketManager {
       if (this.onReceiveSearchResultsCallback) {
         this.onReceiveSearchResultsCallback(payload);
       }
+    });
+    this.socket.on('connect_error', (e) => {
+      console.log(e);
     });
   }
 
