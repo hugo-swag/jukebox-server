@@ -13,7 +13,8 @@ const notFoundHandler = require('./errorhandler/404');
 
 let app = express();
 let server = http.createServer(app);
-let io = socketIO(server);
+let io = new socketIO.Server(server);
+
 
 app.use(cookieParser());
 app.use(cors());
