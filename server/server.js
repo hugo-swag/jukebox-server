@@ -1,23 +1,25 @@
 'use strict';
-require('dotenv').config();
-const STATIC_SERVER = process.env.STATIC_SERVER;
-const path = require('path');
+
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
-const publicPath = path.join(__dirname, './../public');
+const userRoutes = require('./routes/auth/');
+const bearer = require('./auth/middleware/bearer');
+const errorHandler = require('./errorhandler/500');
+const notFoundHandler = require('./errorhandler/404');
+
 let app = express();
 let server = http.createServer(app);
-let io = new socketIO.Server(server, {
-  cors: {
-    origin: STATIC_SERVER,
-  }});
+let io = new socketIO.Server(server);
 
 
-app.use(cookieParser())
-app.use(express.static(publicPath));
+app.use(cookieParser());
+app.use(cors());
+
+app.use(userRoutes);
 
 const Chance = require('chance');
 const chance = new Chance();
@@ -41,6 +43,7 @@ const getRoomList = () => {
   }, []);
 };
 
+io.use(bearer);
 io.on('connection', async (socket) => {
 
   let isRunning = false;
@@ -106,6 +109,7 @@ io.on('connection', async (socket) => {
     io.to(songWithNewBid.room).emit('update-queue', queue);
   });
 
+  
   // play song sets is Running is true, so that playSong is not called again when a song is added
   // it sets a timeout according to the duration of the song, after timeout, calls play next song
   function playSong(queue) {
@@ -132,6 +136,13 @@ io.on('connection', async (socket) => {
     io.to(queue.queueName).emit('update-playing-and-queue', queue);
   }
 });
+
+app.get('/', (req, res) => {
+  res.status(200).send('Welcome to my server');
+});
+
+app.use('*', notFoundHandler);
+app.use(errorHandler);
 
 module.exports = {
   server: server,
