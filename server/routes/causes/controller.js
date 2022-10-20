@@ -1,4 +1,4 @@
-const Recipient = require('../../models/Recipient');
+const Recipient = require('../../models/recipient');
 
 class CausesController{
   constructor(db){
