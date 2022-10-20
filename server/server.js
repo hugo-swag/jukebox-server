@@ -1,4 +1,5 @@
 'use strict';
+
 require('dotenv').config();
 const STATIC_SERVER_URL = process.env.STATIC_SERVER_URL;
 console.log(STATIC_SERVER_URL);
@@ -17,6 +18,7 @@ const notFoundHandler = require('./errorhandler/404');
 let app = express();
 let server = http.createServer(app);
 
+
 let io = new socketIO.Server(server, {
   cors: {
     origin: STATIC_SERVER_URL,
@@ -29,6 +31,7 @@ const causesRoutes = require('./routes/causes');
 app.use("/api/v1", causesRoutes);
 
 // app.use(express.static(publicPath));
+
 app.use(userRoutes);
 
 const Chance = require('chance');
