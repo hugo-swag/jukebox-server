@@ -6,6 +6,7 @@ const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 const publicPath = path.join(__dirname, './../public');
 let app = express();
@@ -16,7 +17,12 @@ let io = new socketIO.Server(server, {
   }});
 
 
-app.use(cookieParser())
+app.use(cors());
+app.use(cookieParser());
+
+const causesRoutes = require('./routes/causes');
+app.use("/api/v1", causesRoutes);
+
 app.use(express.static(publicPath));
 
 const Chance = require('chance');

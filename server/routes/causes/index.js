@@ -4,6 +4,7 @@ const CausesController = require('./controller');
 const auth = require('../../middleware/auth');
 
 router.use(auth);
+router.use(express.json());
 
 router.get('/causes', async(req, res) => {
   const controller = new CausesController();
