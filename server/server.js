@@ -28,12 +28,10 @@ let io = new socketIO.Server(server, {
 app.use(cors(STATIC_SERVER_URL));
 app.use(cookieParser());
 
-const causesRoutes = require('./routes/causes');
-app.use("/api/v1", causesRoutes);
-
-// app.use(express.static(publicPath));
-
 app.use(userRoutes);
+
+const causesRoutes = require('./routes/causes');
+app.use('/api/v1', causesRoutes);
 
 const Chance = require('chance');
 const chance = new Chance();
@@ -41,7 +39,7 @@ const chance = new Chance();
 const getSongData = require('./napster/getSongData');
 
 const MusicQueue = require('./MusicQueue/index');
-const mainQueue = new MusicQueue('main');
+const mainQueue = new MusicQueue('main', 'Animal Shelter');
 
 const queueList = [mainQueue];
 
@@ -66,19 +64,35 @@ io.on('connection', async (socket) => {
   console.log(`Client joined: ${socket.id}`);
   socket.join('main');
   io.to(socket.id).emit('update-playing-and-queue', queueList[0]);
-  io.to(socket.id).emit('room-list', getRoomList());
+      const theRoomList = queueList.map(q => {
+        return {
+          name: q.queueName,
+          id: q.queueName,
+          causeForRoom: q.causeForRoom
+        }
+      });
+  io.to(socket.id).emit('room-list', theRoomList);
 
   // create a new queue for that room, give the queueName property the same as the room name
   socket.on('create-room', rooms => {
     socket.leave(rooms.currentRoom);
     socket.join(rooms.newRoom);
     console.log(`${socket.id} joined room ${rooms.newRoom}`);
+    console.log(rooms);
 
     const oldQueue = queueList.find(q => q.queueName === rooms.newRoom);
     if (!oldQueue) {
-      const newQueue = new MusicQueue(rooms.newRoom);
+      const newQueue = new MusicQueue(rooms.newRoom, rooms.causeForRoom);
       queueList.push(newQueue);
-      io.sockets.emit('room-list', getRoomList());
+      const theRoomList = queueList.map(q => {
+        return {
+          name: q.queueName,
+          id: q.queueName,
+          causeForRoom: q.causeForRoom
+        }
+      });
+      // io.sockets.emit('room-list', getRoomList());
+      io.sockets.emit('room-list', theRoomList);
       io.to(socket.id).emit('update-queue', newQueue);
     } else {
       io.to(socket.id).emit('update-queue', oldQueue);
@@ -96,17 +110,19 @@ io.on('connection', async (socket) => {
   });
 
   socket.on('search-song', async (songData) => {
+    console.log(songData);
     const songSearchData = await getSongData(songData.name, songData.artist);
     console.log(songSearchData);
-    io.to(socket.id).emit('search-results', songSearchData);
+    if(songSearchData)
+      io.to(socket.id).emit('search-results', songSearchData);
   });
 
   // when client adds a song, add it to queue
   // if a song is not playing, call playSong() to start it
   socket.on('add', songToAdd => {
-    songToAdd.songId = chance.guid();
     const queue = findQueue(songToAdd.room);
     queue.addSong(songToAdd);
+    console.log(queue);
     io.to(queue.queueName).emit('update-queue', queue);
     console.log(`${songToAdd.songId} added to queue`);
 
@@ -118,6 +134,7 @@ io.on('connection', async (socket) => {
 
   // when client bids, the bid method in MusicQueue updates the bid and sorts the queue
   socket.on('bid', songWithNewBid => {
+    console.log(songWithNewBid);
     const queue = findQueue(songWithNewBid.room);
     queue.bid(songWithNewBid);
     io.to(songWithNewBid.room).emit('update-queue', queue);
