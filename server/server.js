@@ -39,7 +39,7 @@ const chance = new Chance();
 const getSongData = require('./napster/getSongData');
 
 const MusicQueue = require('./MusicQueue/index');
-const mainQueue = new MusicQueue('main');
+const mainQueue = new MusicQueue('main', 'Animal Shelter');
 
 const queueList = [mainQueue];
 
@@ -64,19 +64,35 @@ io.on('connection', async (socket) => {
   console.log(`Client joined: ${socket.id}`);
   socket.join('main');
   io.to(socket.id).emit('update-playing-and-queue', queueList[0]);
-  io.to(socket.id).emit('room-list', getRoomList());
+      const theRoomList = queueList.map(q => {
+        return {
+          name: q.queueName,
+          id: q.queueName,
+          causeForRoom: q.causeForRoom
+        }
+      });
+  io.to(socket.id).emit('room-list', theRoomList);
 
   // create a new queue for that room, give the queueName property the same as the room name
   socket.on('create-room', rooms => {
     socket.leave(rooms.currentRoom);
     socket.join(rooms.newRoom);
     console.log(`${socket.id} joined room ${rooms.newRoom}`);
+    console.log(rooms);
 
     const oldQueue = queueList.find(q => q.queueName === rooms.newRoom);
     if (!oldQueue) {
-      const newQueue = new MusicQueue(rooms.newRoom);
+      const newQueue = new MusicQueue(rooms.newRoom, rooms.causeForRoom);
       queueList.push(newQueue);
-      io.sockets.emit('room-list', getRoomList());
+      const theRoomList = queueList.map(q => {
+        return {
+          name: q.queueName,
+          id: q.queueName,
+          causeForRoom: q.causeForRoom
+        }
+      });
+      // io.sockets.emit('room-list', getRoomList());
+      io.sockets.emit('room-list', theRoomList);
       io.to(socket.id).emit('update-queue', newQueue);
     } else {
       io.to(socket.id).emit('update-queue', oldQueue);
