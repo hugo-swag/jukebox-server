@@ -10,6 +10,23 @@ const PORT = process.env.PORT || 3001;
 let token = '';
 let socket = null;
 
+const testSongs = [
+  {
+    name: 'Hound Dog',
+    artist: 'Elvis',
+  },
+  {
+    name: 'Summer Days',
+    artist: 'The Beach Boys',
+  },
+  {
+    name: 'In My Life',
+    artist: 'Beatles',
+  },
+];
+
+
+
 try {
   server.start(PORT);
 } catch(e) {
@@ -60,8 +77,14 @@ testSignup()
       },
     );
     console.log('socket connected');
+    console.log(socket);
   })
   .catch((e) => {
     console.log(e);
   });
+
+startDemo() {
+  socket.on('')
+}
+
 
