@@ -15,7 +15,13 @@ module.exports = async (songName, artist) => {
     url: `http://api.napster.com/v2.2/search?apikey=${NAPSTER_API_KEY}&query=${queryString}&type=track&per_type_limit=5`,
   };
 
-  const response = await axios(config);
+  let response;
+  try{
+    response = await axios(config);
+  } catch(e) {
+    console.log(e);
+    return false
+  }
   return response.data.search.data.tracks.map((track) => {
     return new Song(track);
   });

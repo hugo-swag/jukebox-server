@@ -97,7 +97,8 @@ io.on('connection', async (socket) => {
     console.log(songData);
     const songSearchData = await getSongData(songData.name, songData.artist);
     console.log(songSearchData);
-    io.to(socket.id).emit('search-results', songSearchData);
+    if(songSearchData)
+      io.to(socket.id).emit('search-results', songSearchData);
   });
 
   // when client adds a song, add it to queue
