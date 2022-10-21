@@ -33,9 +33,6 @@ app.use(userRoutes);
 const causesRoutes = require('./routes/causes');
 app.use('/api/v1', causesRoutes);
 
-const Chance = require('chance');
-const chance = new Chance();
-
 const getSongData = require('./napster/getSongData');
 
 const MusicQueue = require('./MusicQueue/index');
