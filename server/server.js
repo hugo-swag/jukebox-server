@@ -28,17 +28,10 @@ let io = new socketIO.Server(server, {
 app.use(cors(STATIC_SERVER_URL));
 app.use(cookieParser());
 
-const causesRoutes = require('./routes/causes');
-app.use("/api/v1", causesRoutes);
-
-// app.use(express.static(publicPath));
-
 app.use(userRoutes);
 
 const causesRoutes = require('./routes/causes');
-app.use("/api/v1", causesRoutes);
-
-// app.use(express.static(publicPath));
+app.use('/api/v1', causesRoutes);
 
 const Chance = require('chance');
 const chance = new Chance();
@@ -101,6 +94,7 @@ io.on('connection', async (socket) => {
   });
 
   socket.on('search-song', async (songData) => {
+    console.log(songData);
     const songSearchData = await getSongData(songData.name, songData.artist);
     console.log(songSearchData);
     io.to(socket.id).emit('search-results', songSearchData);
@@ -109,7 +103,6 @@ io.on('connection', async (socket) => {
   // when client adds a song, add it to queue
   // if a song is not playing, call playSong() to start it
   socket.on('add', songToAdd => {
-    songToAdd.songId = chance.guid();
     const queue = findQueue(songToAdd.room);
     queue.addSong(songToAdd);
     io.to(queue.queueName).emit('update-queue', queue);

@@ -1,5 +1,8 @@
 require('dotenv').config();
 const axios = require('axios');
+const Chance = require('chance');
+
+const chance = new Chance();
 
 const NAPSTER_API_KEY = process.env.NAPSTER_API_KEY;
 
@@ -25,6 +28,7 @@ class Song {
     this.name = musicData.albumName;
     this.artist = musicData.artistName;
     this.uri = musicData.previewURL;
+    this.songId = chance.guid();
   }
 }
 
