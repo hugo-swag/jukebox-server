@@ -105,6 +105,7 @@ io.on('connection', async (socket) => {
   socket.on('add', songToAdd => {
     const queue = findQueue(songToAdd.room);
     queue.addSong(songToAdd);
+    console.log(queue);
     io.to(queue.queueName).emit('update-queue', queue);
     console.log(`${songToAdd.songId} added to queue`);
 
@@ -116,6 +117,7 @@ io.on('connection', async (socket) => {
 
   // when client bids, the bid method in MusicQueue updates the bid and sorts the queue
   socket.on('bid', songWithNewBid => {
+    console.log(songWithNewBid);
     const queue = findQueue(songWithNewBid.room);
     queue.bid(songWithNewBid);
     io.to(songWithNewBid.room).emit('update-queue', queue);
